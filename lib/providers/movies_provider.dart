@@ -10,17 +10,42 @@ class MoviesProvider extends ChangeNotifier {
   final String _apiKey = '7640bdbb799bef0b49b6ff98c5155b10';
   final String _language = 'es-CL';
 
+  List<Movie> onDisplayMovies = [];
+  List<Movie> popularMovies = [];
+  int _popularPage = 0;
+
   MoviesProvider() {
-    print('MoviesProovider inicializado');
-    this.getOnDisplayMovies();
+    getOnDisplayMovies();
+    getPopularMovies();
+  }
+
+  Future<String> _getJsonData(String endpoint, [int page = 1]) async {
+    var url = Uri.https(
+      _baseUrl,
+      endpoint,
+      {'api_key': _apiKey, 'language': _language, 'page': '$page'},
+    );
+    var response = await http.get(url);
+
+    return response.body;
   }
 
   getOnDisplayMovies() async {
-    var url = Uri.https(_baseUrl, '3/movie/now_playing',
-        {'api_key': _apiKey, 'language': _language, 'page': '1'});
-    var response = await http.get(url);
-    final nowPlayingResponse = NowPlayingResponse.fromJson(response.body);
+    final jsonData = await _getJsonData('3/movie/now_playing');
 
-    print(nowPlayingResponse.results[0].title);
+    final nowPlayingResponse = NowPlayingResponse.fromJson(jsonData);
+
+    onDisplayMovies = nowPlayingResponse.results;
+    notifyListeners();
+  }
+
+  getPopularMovies() async {
+    _popularPage++;
+    final jsonData = await _getJsonData('3/movie/popular', _popularPage);
+
+    final popularResponse = PopularResponse.fromJson(jsonData);
+
+    popularMovies = [...popularMovies, ...popularResponse.results];
+    notifyListeners();
   }
 }

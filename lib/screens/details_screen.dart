@@ -23,7 +23,7 @@ class DetailsScreen extends StatelessWidget {
                     posterImg: movie.fullPosterImg,
                     voteAverage: movie.voteAverage),
                 _Overview(overview: movie.overview),
-                const CastingCards(),
+                CastingCards(movieId: movie.id),
               ],
             ),
           )

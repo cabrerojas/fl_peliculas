@@ -40,7 +40,7 @@ class Movie {
   }
 
   get fullBackdropPath {
-    return posterPath != null
+    return backdropPath != null
         ? 'https://image.tmdb.org/t/p/w500$backdropPath'
         : 'https://i.stack.imgur.com/GNhxO.png';
   }

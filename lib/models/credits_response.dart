@@ -73,4 +73,10 @@ class Cast {
         department: json["department"],
         job: json["job"],
       );
+
+  get fullProfilePath {
+    return profilePath != null
+        ? 'https://image.tmdb.org/t/p/w500$profilePath'
+        : 'https://i.stack.imgur.com/GNhxO.png';
+  }
 }

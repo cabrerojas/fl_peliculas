@@ -17,11 +17,7 @@ class DetailsScreen extends StatelessWidget {
           SliverList(
             delegate: SliverChildListDelegate(
               [
-                _PosterAndTitle(
-                    title: movie.title,
-                    originalTitle: movie.originalTitle,
-                    posterImg: movie.fullPosterImg,
-                    voteAverage: movie.voteAverage),
+                _PosterAndTitle(movie: movie),
                 _Overview(overview: movie.overview),
                 CastingCards(movieId: movie.id),
               ],
@@ -75,18 +71,9 @@ class _CustomAppBar extends StatelessWidget {
 }
 
 class _PosterAndTitle extends StatelessWidget {
-  final String title;
-  final String originalTitle;
-  final String posterImg;
-  final double voteAverage;
+  final Movie movie;
 
-  const _PosterAndTitle(
-      {Key? key,
-      required this.title,
-      required this.originalTitle,
-      required this.posterImg,
-      required this.voteAverage})
-      : super(key: key);
+  const _PosterAndTitle({Key? key, required this.movie}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -98,17 +85,20 @@ class _PosterAndTitle extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: FadeInImage(
-              placeholder: const AssetImage(
-                'assets/no-image.jpg',
+          Hero(
+            tag: movie.heroId!,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: FadeInImage(
+                placeholder: const AssetImage(
+                  'assets/no-image.jpg',
+                ),
+                image: NetworkImage(
+                  movie.fullPosterImg,
+                ),
+                height: 150,
+                width: 110,
               ),
-              image: NetworkImage(
-                posterImg,
-              ),
-              height: 150,
-              width: 110,
             ),
           ),
           const SizedBox(
@@ -120,7 +110,7 @@ class _PosterAndTitle extends StatelessWidget {
               ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: size.width - 190),
                 child: Text(
-                  title,
+                  movie.title,
                   style: textTheme.headline5,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
@@ -129,7 +119,7 @@ class _PosterAndTitle extends StatelessWidget {
               ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: size.width - 190),
                 child: Text(
-                  originalTitle,
+                  movie.originalTitle,
                   style: textTheme.subtitle1,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
@@ -145,7 +135,7 @@ class _PosterAndTitle extends StatelessWidget {
                     width: 5,
                   ),
                   Text(
-                    '$voteAverage',
+                    '${movie.voteAverage}',
                     style: textTheme.caption,
                   )
                 ],

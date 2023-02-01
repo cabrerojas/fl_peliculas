@@ -1,3 +1,5 @@
+export 'package:fl_peliculas/models/search_response.dart';
+
 export 'package:fl_peliculas/models/credits_response.dart';
 
 export 'package:fl_peliculas/models/popular_response.dart';
